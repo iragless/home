@@ -1,7 +1,7 @@
 import json
 from urllib.request import urlopen
 
-with urlopen("https://api.solunar.org/solunar/42.66,-84.07,20180207,-4") as response:
+with urlopen("https://api.solunar.org/solunar/-34.99,138.52,20220907,10") as response:
     source = response.read()
 
 data = json.loads(source)
