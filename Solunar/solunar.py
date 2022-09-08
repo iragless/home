@@ -7,5 +7,6 @@ with urlopen("https://api.sunrise-sunset.org/json?lat=-34.99&lng=138.52&date=tod
 
 data = json.loads(source)
 
-print(json.dumps(data, indent=2))
+while True:
+    print(data['results'][input('?')])
 
