@@ -9,6 +9,9 @@ import streamlit as st #pip install streamlit
 from streamlit_option_menu import option_menu #pip install streamlit option menu
 import plotly.express as px # pip install plotly
 
+import database as db
+
+
 #----------------settings-------------
 page_title = "Rain Tracker"
 page_icon = ":umbrella:"
@@ -37,9 +40,6 @@ months = list(calendar.month_name[1:])
 if selected == "Data Entry":
     st.header(f"Rain in {units}")
     with st.form("entry_form",clear_on_submit=True):
-    #   col1, col2 = st.columns(2)
-    #   col1.selectbox("Select Month:", months, key="month")
-    #   col2.selectbox("Select Year:", years, key="year")
 
     #   "---"
         st.date_input("Enter Date", key="selected_date")
@@ -50,10 +50,18 @@ if selected == "Data Entry":
         submitted = st.form_submit_button("Save Rainfall")
         if submitted:
             entered_date = str(st.session_state["selected_date"])
+            dt=datetime.strptime(entered_date, '%Y-%m-%d')
+            entered_month = dt.month
+            entered_year = dt.year
             rain_amount = int(st.session_state["rain_fall"])
             observation = str(st.session_state["observation"])
             # TODO: Insert Values into Spreadsheet or Database
+            db.insert_rainfall(entered_date, entered_month, entered_year, rain_amount, observation)
+
             st.write(f"Date: {entered_date}")
+            st.write(f"Month: {entered_month}")
+            st.write(f"Year: {entered_year}")
+
             st.write(f"Rainfall: {rain_amount}")
             st.write(f"Observation: {observation}")
             st.success("Data Saved")
@@ -64,29 +72,41 @@ if selected == "History":
     st.header("Rainfall History")
     with st.form("saved_periods"):
         #TODO: Get periods from database
-        period = st.selectbox("Select Period:", ["2022_September"])
+        period = st.selectbox("Select Period:", "September 2022") #TODO: change hard coded date to selectbox
         submitted = st.form_submit_button("Change Period")
         #if submitted:
         #TODO: Get Data from Database
-        comment = "some Comment"
-        rain_falls = {'2022-09-21': 5, '2022-09-18': 0, '2022-09-12': 3, '2022-09-10': 10, 
-                        '2022-09-5': 5, '2022-09-4': 0, 
-                        '2022-09-3': 5, '2022-09-1': 1 }
+        rain_falls = db.fetch_all_dates()
+        st.write(f"Rainfall: {rain_falls}")
+
+        rain_month_total = 0
+        for rain in rain_falls:
+            if rain["month"] == 8 and rain["year"] == 2022:
+                rain_month_total += rain["rainfall"]          
+        st.write(rain_month_total)
+        df = pd.DataFrame(rain_falls)
+        df[["key", "rainfall"]]
+        
+        st.table(df)
+#    {'2022-09-21': 5, '2022-09-18': 0, '2022-09-12': 3, '2022-09-10': 10, 
+#                        '2022-09-5': 5, '2022-09-4': 0, 
+#                        '2022-09-3': 5, '2022-09-1': 1 }
         
         # Create Metrics
-        total_rainfall = sum(rain_falls.values())
-        selected_month = calendar.month_name[datetime.now().month] #calendar.month_name(datetime.now().today)
-        col1, col2 = st.columns(2)
-        col1.metric("Total Rainfall", f"{total_rainfall}")
-        col2.metric("Month: ", selected_month)
-        st.text(f"Comment: {comment}")
+        # total_rainfall = sum(rain_falls.values())
+        # selected_month = calendar.month_name[datetime.now().month] #calendar.month_name(datetime.now().today)
+        # col1, col2 = st.columns(2)
+        # col1.metric("Total Rainfall", f"{total_rainfall}")
+        # col2.metric("Month: ", selected_month)
+        
+        
 
         #fig = px.line(pd.DataFrame(rain_falls, index=["key"]).T, y="key")
-        fig = px.bar(x=['2022-09-21', '2022-09-18', '2022-09-12', '2022-09-10', 
-                        '2022-09-5', '2022-09-4', 
-                        '2022-09-3', '2022-09-1'], y=[5, 0, 3, 10, 
-                        5, 0, 5, 1])
-        st.plotly_chart(fig, use_container_width=True)
+        # fig = px.bar(x=['2022-09-21', '2022-09-18', '2022-09-12', '2022-09-10', 
+        #                 '2022-09-5', '2022-09-4', 
+        #                 '2022-09-3', '2022-09-1'], y=[5, 0, 3, 10, 
+        #                 5, 0, 5, 1])
+        # st.plotly_chart(fig, use_container_width=True)
 
 
         
