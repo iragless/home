@@ -1,4 +1,4 @@
-import locale
+import pandas as pd
 from calendar import calendar
 
 
@@ -6,7 +6,7 @@ import calendar #core python module
 from datetime import date, datetime #core python module
 
 import streamlit as st #pip install streamlit
-import plotly.graph_objects as go # pip install plotly
+import plotly.express as px # pip install plotly
 
 #----------------settings-------------
 page_title = "Rain Tracker"
@@ -59,7 +59,7 @@ with st.form("saved_periods"):
         comment = "some Comment"
         rain_falls = {'2022-09-21': 5, '2022-09-18': 0, '2022-09-12': 3, '2022-09-10': 10, 
                         '2022-09-5': 5, '2022-09-4': 0, 
-                        '2022-09-3': 5, '2022-09-1': 1, }
+                        '2022-09-3': 5, '2022-09-1': 1 }
         
         # Create Metrics
         total_rainfall = sum(rain_falls.values())
@@ -68,6 +68,16 @@ with st.form("saved_periods"):
         col1.metric("Total Rainfall", f"{total_rainfall}")
         col2.metric("Month: ", selected_month)
         st.text(f"Comment: {comment}")
+
+        #fig = px.line(pd.DataFrame(rain_falls, index=["key"]).T, y="key")
+        fig = px.bar(x=['2022-09-21', '2022-09-18', '2022-09-12', '2022-09-10', 
+                        '2022-09-5', '2022-09-4', 
+                        '2022-09-3', '2022-09-1'], y=[5, 0, 3, 10, 
+                        5, 0, 5, 1])
+        st.plotly_chart(fig, use_container_width=True)
+
+
+        
 
 
 
