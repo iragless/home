@@ -1,3 +1,5 @@
+from operator import index
+from tkinter.ttk import Style
 import pandas as pd
 from calendar import calendar
 
@@ -72,26 +74,33 @@ if selected == "History":
     st.header("Rainfall History")
     with st.form("saved_periods"):
         #TODO: Get periods from database
-        period = st.selectbox("Select Period:", "September 2022") #TODO: change hard coded date to selectbox
+        period = st.selectbox("Select Period:", ("September 2022")) #TODO: change hard coded date to selectbox
         submitted = st.form_submit_button("Change Period")
         #if submitted:
         #TODO: Get Data from Database
         rain_falls = db.fetch_all_dates()
-        st.write(f"Rainfall: {rain_falls}")
+        #st.write(f"Rainfall: {rain_falls}")
 
         rain_month_total = 0
+        ds = []
+        rs = []
         for rain in rain_falls:
-            if rain["month"] == 8 and rain["year"] == 2022:
-                rain_month_total += rain["rainfall"]          
-        st.write(rain_month_total)
-        df = pd.DataFrame(rain_falls)
-        df[["key", "rainfall"]]
+            if rain["month"] == 9 and rain["year"] == 2022:
+                rain_month_total += rain["rainfall"]      
+                ds.append(rain["key"])   
+                rs.append(rain["rainfall"]) 
+        st.write(f"Total Rain for selected Month: ", rain_month_total, "mm")
+        #st.write(rs, ds)
+        
+        data = {"Date":ds, "Rainfall": rs}
+
+        df = pd.DataFrame(data)
         
         st.table(df)
-#    {'2022-09-21': 5, '2022-09-18': 0, '2022-09-12': 3, '2022-09-10': 10, 
-#                        '2022-09-5': 5, '2022-09-4': 0, 
-#                        '2022-09-3': 5, '2022-09-1': 1 }
-        
+
+        fig = px.bar(x=ds, y=rs)
+        st.plotly_chart(fig, use_container_width=True)
+
         # Create Metrics
         # total_rainfall = sum(rain_falls.values())
         # selected_month = calendar.month_name[datetime.now().month] #calendar.month_name(datetime.now().today)
