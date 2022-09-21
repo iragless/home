@@ -53,28 +53,28 @@ st.header("Rainfall History")
 with st.form("saved_periods"):
     #TODO: Get periods from database
     period = st.selectbox("Select Period:", ["2022_September"])
-    submitted = st.form_submit_button("Plot Period")
-    if submitted:
-        #TODO: Get Data from Database
-        comment = "some Comment"
-        rain_falls = {'2022-09-21': 5, '2022-09-18': 0, '2022-09-12': 3, '2022-09-10': 10, 
-                        '2022-09-5': 5, '2022-09-4': 0, 
-                        '2022-09-3': 5, '2022-09-1': 1 }
-        
-        # Create Metrics
-        total_rainfall = sum(rain_falls.values())
-        selected_month = calendar.month_name[datetime.now().month] #calendar.month_name(datetime.now().today)
-        col1, col2 = st.columns(2)
-        col1.metric("Total Rainfall", f"{total_rainfall}")
-        col2.metric("Month: ", selected_month)
-        st.text(f"Comment: {comment}")
+    submitted = st.form_submit_button("Change Period")
+    #if submitted:
+    #TODO: Get Data from Database
+    comment = "some Comment"
+    rain_falls = {'2022-09-21': 5, '2022-09-18': 0, '2022-09-12': 3, '2022-09-10': 10, 
+                    '2022-09-5': 5, '2022-09-4': 0, 
+                    '2022-09-3': 5, '2022-09-1': 1 }
+    
+    # Create Metrics
+    total_rainfall = sum(rain_falls.values())
+    selected_month = calendar.month_name[datetime.now().month] #calendar.month_name(datetime.now().today)
+    col1, col2 = st.columns(2)
+    col1.metric("Total Rainfall", f"{total_rainfall}")
+    col2.metric("Month: ", selected_month)
+    st.text(f"Comment: {comment}")
 
-        #fig = px.line(pd.DataFrame(rain_falls, index=["key"]).T, y="key")
-        fig = px.bar(x=['2022-09-21', '2022-09-18', '2022-09-12', '2022-09-10', 
-                        '2022-09-5', '2022-09-4', 
-                        '2022-09-3', '2022-09-1'], y=[5, 0, 3, 10, 
-                        5, 0, 5, 1])
-        st.plotly_chart(fig, use_container_width=True)
+    #fig = px.line(pd.DataFrame(rain_falls, index=["key"]).T, y="key")
+    fig = px.bar(x=['2022-09-21', '2022-09-18', '2022-09-12', '2022-09-10', 
+                    '2022-09-5', '2022-09-4', 
+                    '2022-09-3', '2022-09-1'], y=[5, 0, 3, 10, 
+                    5, 0, 5, 1])
+    st.plotly_chart(fig, use_container_width=True)
 
 
         
