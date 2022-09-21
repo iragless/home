@@ -53,7 +53,7 @@ if selected == "Data Entry":
         if submitted:
             entered_date = str(st.session_state["selected_date"])
             dt=datetime.strptime(entered_date, '%Y-%m-%d')
-            entered_month = dt.month
+            entered_month = dt.strftime("%B")
             entered_year = dt.year
             rain_amount = int(st.session_state["rain_fall"])
             observation = str(st.session_state["observation"])
@@ -74,32 +74,33 @@ if selected == "History":
     st.header("Rainfall History")
     with st.form("saved_periods"):
         #TODO: Get periods from database
-        period = st.selectbox("Select Period:", ("September 2022")) #TODO: change hard coded date to selectbox
-        submitted = st.form_submit_button("Change Period")
-        #if submitted:
-        #TODO: Get Data from Database
+        select_month = st.selectbox("Select Month:", ('January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December')) #TODO: default to current month/year
+        select_year = st.selectbox("Select Year", (2022, 2023))
+        submitted = st.form_submit_button("View Period")
         rain_falls = db.fetch_all_dates()
-        #st.write(f"Rainfall: {rain_falls}")
+        if submitted:
+            rain_month_total = 0
+            ds = []
+            rs = []
+            os =[]
+            for rain in rain_falls:
+                if rain["month"] == select_month and rain["year"] == select_year:
+                    rain_month_total += rain["rainfall"]      
+                    ds.append(rain["key"])   
+                    rs.append(rain["rainfall"])
+                    os.append(rain["observation"]) 
+            st.write(f"Total Rain for selected Month: ", rain_month_total, "mm")
+            
+            data = {"Date":ds, "Rainfall (mm)": rs, "Observation": os}
 
-        rain_month_total = 0
-        ds = []
-        rs = []
-        for rain in rain_falls:
-            if rain["month"] == 9 and rain["year"] == 2022:
-                rain_month_total += rain["rainfall"]      
-                ds.append(rain["key"])   
-                rs.append(rain["rainfall"]) 
-        st.write(f"Total Rain for selected Month: ", rain_month_total, "mm")
-        #st.write(rs, ds)
-        
-        data = {"Date":ds, "Rainfall": rs}
+            df = pd.DataFrame(data)
+            
+            st.table(df)
 
-        df = pd.DataFrame(data)
-        
-        st.table(df)
-
-        fig = px.bar(x=ds, y=rs)
-        st.plotly_chart(fig, use_container_width=True)
+            if ds:
+                fig = px.bar(x=ds, y=rs)
+                st.plotly_chart(fig, use_container_width=True)
 
         # Create Metrics
         # total_rainfall = sum(rain_falls.values())
