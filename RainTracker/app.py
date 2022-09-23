@@ -1,5 +1,7 @@
-from operator import index
-from tkinter.ttk import Style
+# streamlit run app.py
+
+# from operator import index
+# from tkinter.ttk import Style
 import pandas as pd
 from calendar import calendar
 
