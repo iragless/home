@@ -80,8 +80,9 @@ if selected == "History":
         'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December')) #TODO: default to current month/year
         select_year = st.selectbox("Select Year", (2022, 2023))
         submitted = st.form_submit_button("View Period")
-        rain_falls = db.fetch_all_dates()
+        
         if submitted:
+            rain_falls = db.fetch_all_dates()
             rain_month_total = 0
             ds = []
             rs = []
@@ -102,6 +103,8 @@ if selected == "History":
 
             if ds:
                 fig = px.bar(x=ds, y=rs)
+                fig.update_xaxes(title="")
+                fig.update_yaxes(title="")
                 st.plotly_chart(fig, use_container_width=True)
 
         # Create Metrics
