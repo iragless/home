@@ -105,7 +105,13 @@ if selected == "History":
                 fig = px.bar(x=ds, y=rs)
                 fig.update_xaxes(title="date")
                 fig.update_yaxes(title="mm")
-                st.plotly_chart(fig, use_container_width=True)
+                fig.update_layout(margin = dict (            
+                    l = 5,        # left
+                    r = 5,        # right
+                    t = 50,        # top
+                    b = 10         # bottom
+                        ))
+                st.plotly_chart(fig, use_container_width=True, config = {'displayModeBar': False})
 
         # Create Metrics
         # total_rainfall = sum(rain_falls.values())
