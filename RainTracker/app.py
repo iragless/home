@@ -103,8 +103,8 @@ if selected == "History":
 
             if ds:
                 fig = px.bar(x=ds, y=rs)
-                fig.update_xaxes(title="")
-                fig.update_yaxes(title="")
+                fig.update_xaxes(title="date")
+                fig.update_yaxes(title="mm")
                 st.plotly_chart(fig, use_container_width=True)
 
         # Create Metrics
