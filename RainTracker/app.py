@@ -93,8 +93,9 @@ if selected == "History":
                     ds.append(rain["key"])   
                     rs.append(rain["rainfall"])
                     os.append(rain["observation"]) 
-            st.write(f"Total Rain for selected Month: ", rain_month_total, "mm")
-            
+            #st.write(f"Total Rain for selected Month: ", rain_month_total, "mm")
+            st.metric(label="Total Rain for selected Month", value = rain_month_total)
+
             data = {"Date":ds, "Rainfall (mm)": rs, "Observation": os}
 
             df = pd.DataFrame(data)
