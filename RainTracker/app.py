@@ -45,8 +45,7 @@ if selected == "Data Entry":
         #   "---"
         st.date_input("Enter Date", key="selected_date")
         # TODO: ensure local timezone shows correct day.
-        st.number_input(f"Enter Rain in mm", min_value=0,
-                        format="%i", step=1, key="rain_fall")
+        st.number_input(f"Enter Rain in mm", min_value=0.0, format="%f", step=0.5, key="rain_fall")
         st.text_area("Observations",
                      placeholder="Enter observation here", key="observation")
 
@@ -57,7 +56,7 @@ if selected == "Data Entry":
             dt = datetime.strptime(entered_date, '%Y-%m-%d')
             entered_month = dt.strftime("%B")
             entered_year = dt.year
-            rain_amount = int(st.session_state["rain_fall"])
+            rain_amount = float(st.session_state["rain_fall"])
             observation = str(st.session_state["observation"])
 
 # Insert into database
@@ -102,9 +101,10 @@ if selected == "History":
                       value=rain_month_total)
 
             data = {"Date": ds, "Rainfall (mm)": rs, "Observation": os}
-
+            
+            
             df = pd.DataFrame(data)
-
+            df.round(1)
             st.table(df)
 
             if ds:
