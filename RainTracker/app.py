@@ -82,7 +82,8 @@ if selected == "History":
         # TODO: Get periods from database
         select_month = st.selectbox("Select Month:", ('January', 'February', 'March', 'April',
                                                       'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'))  # TODO: default to current month/year
-        select_year = st.selectbox("Select Year", (2022, 2023))
+        current_year = datetime.datetime.now().year
+        select_year = st.selectbox("Select Year", (current_year, 2022, 2023, 2024, 2025))
         submitted = st.form_submit_button("View Period")
 
         if submitted:
