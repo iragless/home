@@ -4,6 +4,7 @@ from calendar import calendar
 
 
 import calendar  # core python module
+import datetime
 from datetime import date, datetime  # core python module
 
 import streamlit as st  # pip install streamlit
@@ -82,7 +83,7 @@ if selected == "History":
         # TODO: Get periods from database
         select_month = st.selectbox("Select Month:", ('January', 'February', 'March', 'April',
                                                       'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'))  # TODO: default to current month/year
-        current_year = datetime.datetime.now().year
+        current_year = datetime.now().year
         select_year = st.selectbox("Select Year", (current_year, 2022, 2023, 2024, 2025))
         submitted = st.form_submit_button("View Period")
 
