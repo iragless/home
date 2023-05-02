@@ -35,7 +35,7 @@ selected = option_menu(
 
 
 # ----Dropdown values for selecing the period
-years = [datetime.today().year, datetime.today().year - 1]
+years = [datetime.today().year, datetime.today().year]
 months = list(calendar.month_name[1:])
 
 # ---- input and save periods ----
